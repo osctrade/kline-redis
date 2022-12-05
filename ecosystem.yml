@@ -1,7 +1,8 @@
 # kline-redis 配置
 apps:
   - name: kline-redis
-    script: .venv/bin/kline
+    script: '~/apps/kline_redis/current/.venv/bin/kline'
+#    interpreter: '.venv/bin/python',
     env:
       PYTHONPATH: ./
       KLINE_CONFIG: config.yaml
@@ -13,8 +14,8 @@ deploy:
     user: ubuntu
     ref: origin/main
     repo: "git@github.com:osctrade/kline-redis.git"
-    path: "/home/ubuntu/apps/kline-redis"
-    # 安装时是当前目录为 /home/ubuntu/apps/grid_pro/current
+    path: "/home/ubuntu/apps/kline_redis"
+    # 安装时是当前目录为 ~/apps/kline_redis/current
     post-setup: "/usr/bin/python3 -m venv .venv && .venv/bin/python -m pip install -e ."
 
 
