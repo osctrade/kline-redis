@@ -1,0 +1,20 @@
+version: 1
+formatters:
+  grid:
+    format: '%(asctime)s - %(module)s[%(lineno)d] - %(levelname)s: %(message)s'
+handlers:
+  console:
+    class: logging.StreamHandler
+    level: DEBUG
+    formatter: grid
+    stream: ext://sys.stdout
+  console_err:
+    class: logging.StreamHandler
+    level: ERROR
+    formatter: grid
+    stream: ext://sys.stderr
+loggers:
+  kline:
+    level: DEBUG
+    handlers: [ console ]
+    propagate: yes
