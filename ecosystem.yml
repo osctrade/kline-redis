@@ -15,7 +15,7 @@ deploy:
     repo: "git@github.com:osctrade/kline-redis.git"
     path: "/home/ubuntu/apps/kline-redis"
     # 安装时是当前目录为 /home/ubuntu/apps/grid_pro/current
-    post-setup: "/usr/bin/python3 -m venv .venv && .venv/bin/pip install -e ."
+    post-setup: "/usr/bin/python3 -m venv .venv && .venv/bin/python -m pip install -e ."
 
 
 # usage:

@@ -35,7 +35,7 @@ def main():
 
     config_file = sys.argv[1] if len(sys.argv) == 2 else None or os.getenv('KLINE_CONFIG')
     if not config_file:
-        logger.error(f'请指定运行参数文件，或设置 GRID_CONFIG 环境变量！')
+        logger.error(f'请指定运行参数文件，或设置 KLINE_CONFIG 环境变量！')
         return 1
     config_file = os.path.expanduser(config_file)
     config = read_config(config_file)
