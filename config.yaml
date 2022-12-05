@@ -2,8 +2,8 @@ redis_url: redis://localhost
 cached_times: 30days
 interval: 15m
 debug: False
-ccxt:
-  aiohttp_proxy: 'http://jp2.oscbot.xyz:8118'  # async use this
+#ccxt:
+#  aiohttp_proxy: 'http://jp2.oscbot.xyz:8118'  # async use this
 dingding:
   robot_id: e02d79d08f29878bf1351299091143cf781488dd58301ed8dde74e4ee9d9d91a
   secret: SEC4efd80819c5ecfefa93adcd214478292724b1a7558d2d2c1eca73afdd1eb8419

@@ -1,18 +1,19 @@
+import asyncio
+import logging
 import os
 import signal
-import logging
-import asyncio
 import sys
-from util import set_logging_config
 
-from trade_lib.util import read_config, logging_config
+from trade_lib.util import read_config
+
 import kline_redis
+from util import set_logging_config
 
 logger = logging.getLogger('kline')
 
 
 async def start(config):
-    logger.info(f'start kline redis....\r\n{config}')
+    logger.info(f'start kline redis....')
     await kline_redis.main(config)
 
 
@@ -36,6 +37,8 @@ def main():
     config = read_config(config_file)
     try:
         asyncio.run(start(config))
+    except asyncio.CancelledError:
+        [task.cancel() for task in asyncio.all_tasks()]
     except KeyboardInterrupt:
         logging.info('Ctrl+C 完成退出')
     except Exception as e:
