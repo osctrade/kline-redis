@@ -1,4 +1,4 @@
-redis_url: redis://localhost
+redis_url: redis://:ca4f36cfda5c47ef8021911a17902cae0bd291aa@localhost
 cached_times: 30days
 interval: 15m
 debug: False
