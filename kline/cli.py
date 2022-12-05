@@ -13,8 +13,12 @@ logger = logging.getLogger('kline')
 
 
 async def start(config):
-    logger.info(f'start kline redis....')
-    await kline.kline_redis.main(config)
+    try:
+        logger.info(f'start kline redis....')
+        await kline.kline_redis.main(config)
+    except asyncio.CancelledError:
+        [task.cancel() for task in asyncio.all_tasks()]
+        await asyncio.gather(*asyncio.all_tasks())
 
 
 def handler_stop_signals(signum, frame):
@@ -37,8 +41,6 @@ def main():
     config = read_config(config_file)
     try:
         asyncio.run(start(config))
-    except asyncio.CancelledError:
-        [task.cancel() for task in asyncio.all_tasks()]
     except KeyboardInterrupt:
         logging.info('Ctrl+C 完成退出')
     except Exception as e:

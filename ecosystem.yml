@@ -1,0 +1,24 @@
+# kline-redis 配置
+apps:
+  - name: kline-redis
+    script: .venv/bin/kline
+    env:
+      PYTHONPATH: ./
+      KLINE_CONFIG: config.yaml
+    kill_timeout: 5000
+
+deploy:
+  sg:
+    host: sg
+    user: ubuntu
+    ref: origin/main
+    repo: "git@github.com:osctrade/kline-redis.git"
+    path: "/home/ubuntu/apps/kline-redis"
+    # 安装时是当前目录为 /home/ubuntu/apps/grid_pro/current
+    post-setup: "/usr/bin/python3 -m venv .venv && .venv/bin/pip install -e ."
+
+
+# usage:
+# pm2 deploy ecosystem.yml sg setup
+# pm2 deploy ecosystem.yml sg
+#

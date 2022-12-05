@@ -52,6 +52,10 @@ def kline_cur_key(symbol, interval):
     return KLINE_CUR_KEY.format(interval=interval, symbol=symbol)
 
 
+async def get_redis(redis_url):
+    return await aioredis.from_url(redis_url, decode_responses=False)
+
+
 def get_cur_candle_begin_time(interval, ts=datetime.utcnow().timestamp(), sub=0):
     """
     取当前最近的 k 线开始时间

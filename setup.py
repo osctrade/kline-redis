@@ -6,13 +6,8 @@ install_requires = [
     'tenacity',
     'pandas',
     'trade-lib',
-    # 'PyYAML',
-    # 'python-dotenv',
-    # 'asyncclick',
-    # 'pyotp',
-    # 'plotly',
+    'PyYAML',
     'redis',
-    # 'tabulate',
 ]
 
 setup(
