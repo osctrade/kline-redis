@@ -6,15 +6,15 @@ import sys
 
 from trade_lib.util import read_config
 
-import kline_redis
-from util import set_logging_config
+import kline.kline_redis
+from kline.util import set_logging_config
 
 logger = logging.getLogger('kline')
 
 
 async def start(config):
     logger.info(f'start kline redis....')
-    await kline_redis.main(config)
+    await kline.kline_redis.main(config)
 
 
 def handler_stop_signals(signum, frame):
