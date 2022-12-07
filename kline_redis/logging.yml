@@ -14,7 +14,7 @@ handlers:
     formatter: grid
     stream: ext://sys.stderr
 loggers:
-  kline:
+  kline_redis:
     level: DEBUG
     handlers: [ console ]
     propagate: yes

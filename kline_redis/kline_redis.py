@@ -12,12 +12,12 @@ import pandas as pd
 from redis import asyncio as aioredis
 from trade_lib.message import dinding_send
 
-from kline import binance_kline
-from kline.api import kline_his_key, GRID_KLINE_STATUS, kline_cur_key, GRID_PRICE_STATUS, EXCHANGE_INFO_KEY, \
+from kline_redis import binance_kline
+from kline_redis.api import kline_his_key, GRID_KLINE_STATUS, kline_cur_key, GRID_PRICE_STATUS, EXCHANGE_INFO_KEY, \
     get_symbols, get_kline, kline_check, get_current_price
-from kline.repair import check_redis_klines, redis_run_check
+from kline_redis.repair import check_redis_klines, redis_run_check
 
-logger = logging.getLogger('kline')
+logger = logging.getLogger('kline_redis')
 
 
 async def update_kline(redis_server: aioredis.Redis, res):

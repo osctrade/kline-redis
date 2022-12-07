@@ -6,16 +6,16 @@ import sys
 
 from trade_lib.util import read_config
 
-import kline.kline_redis
-from kline.util import set_logging_config
+import kline_redis.kline_redis
+from kline_redis.util import set_logging_config
 
-logger = logging.getLogger('kline')
+logger = logging.getLogger('kline_redis')
 
 
 async def start(config):
     try:
         logger.info(f'start kline redis....')
-        await kline.kline_redis.main(config)
+        await kline_redis.kline_redis.main(config)
     except asyncio.CancelledError:
         [task.cancel() for task in asyncio.all_tasks()]
         await asyncio.gather(*asyncio.all_tasks())

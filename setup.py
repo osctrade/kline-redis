@@ -2,7 +2,7 @@
 from setuptools import setup, find_packages
 
 install_requires = [
-    "ccxt>=1.95.13",
+    "ccxt>=2.2.79",
     'tenacity',
     'pandas',
     'trade-lib',
@@ -13,13 +13,13 @@ install_requires = [
 setup(
     name='kline-redis',
     description="K 线数据 redisk 缓存",
-    version='0.1.1',
-    py_modules=['kline'],
+    version='0.1.2',
+    py_modules=['kline_redis'],
     packages=find_packages(exclude=["tests"]),
     install_requires=install_requires,
     entry_points={
         'console_scripts': [
-            'kline = kline.cli:main',
+            'kline-redis = kline_redis.cli:main',
         ],
     },
 )

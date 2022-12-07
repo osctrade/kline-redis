@@ -13,10 +13,11 @@ from redis import asyncio as aioredis
 from tenacity import retry, wait_exponential, stop_after_attempt
 from trade_lib.message import dinding_send
 
-from kline.api import get_symbols, kline_his_key, kline_cur_key, KLINE_COLUMNS, GRID_KLINE_STATUS, GRID_PRICE_STATUS, \
+from kline_redis.api import get_symbols, kline_his_key, kline_cur_key, KLINE_COLUMNS, GRID_KLINE_STATUS, \
+    GRID_PRICE_STATUS, \
     get_cur_candle_begin_time
 
-logger = logging.getLogger('kline')
+logger = logging.getLogger('kline_redis')
 
 
 # 程序运行前，补充没有的 k 线数据
@@ -32,14 +33,14 @@ async def repair_redis_kline(redis_server: aioredis.Redis, client, symbol, inter
     redis_klines = [pickle.loads(kline) for kline in klines if kline]
 
     api_klines = await client.fapiPublic_get_klines({'symbol': symbol, 'interval': interval, 'limit': rows})
-
     candle_begin_times = {kline['t'] for kline in redis_klines}
 
     add_klines = []
+    last = get_cur_candle_begin_time('15m', datetime.utcnow().timestamp(), 1)
     for kline in api_klines:
         # api 取得的数据没有 symbol 字段
         kline = dict(zip(list(KLINE_COLUMNS.keys())[1:], kline))
-        if kline['t'] not in candle_begin_times:
+        if kline['t'] not in candle_begin_times and (pd.to_datetime(kline['t'], unit='ms') <= last):
             kline['s'] = symbol
             add_klines.append(kline)
 

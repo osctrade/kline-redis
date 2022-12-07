@@ -7,7 +7,7 @@ import pandas as pd
 from redis import asyncio as aioredis
 from tenacity import retry, wait_exponential, stop_after_attempt
 
-logger = logging.getLogger('kline')
+logger = logging.getLogger('kline_redis')
 
 pd.set_option('display.max_rows', 1000)
 pd.set_option('expand_frame_repr', False)  # 当列太多时不换行
