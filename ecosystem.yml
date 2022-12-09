@@ -1,7 +1,7 @@
 # kline-redis 配置
 apps:
   - name: kline-redis
-    script: '.venv/bin/kline'   # 相对于 deploy path/source
+    script: '.venv/bin/kline-redis'   # 相对于 deploy path/source
     interpreter: '.venv/bin/python'
     env:
       PYTHONPATH: ./
