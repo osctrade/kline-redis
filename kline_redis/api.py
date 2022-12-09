@@ -88,12 +88,19 @@ async def get_symbols(redis_server: aioredis.Redis):
 
 async def get_current_price(redis_server: aioredis.Redis, symbol) -> float:
     """
-    取最近的价格
+    取最近的价格, 如果有问题返回 None
     """
-    redis_key = kline_cur_key(symbol, '15m')
-    res = await redis_server.get(redis_key)
-    res = pickle.loads(res)
-    return float(res['c'])
+    try:
+        redis_key = kline_cur_key(symbol, '15m')
+        res = await redis_server.get(redis_key)
+        if res is not None:
+            res = pickle.loads(res)
+            return float(res['c'])
+        else:
+            return None
+    except:
+        logger.exception('get_current_price 出错')
+        return None
 
 
 async def get_kline(redis_server: aioredis.Redis, symbol, interval, limit=1000, check=True) -> Union[
