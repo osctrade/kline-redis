@@ -13,7 +13,7 @@ from redis import asyncio as aioredis
 from tenacity import retry, wait_exponential, stop_after_attempt
 from trade_lib.message import dinding_send
 
-from kline_redis.api import get_symbols, kline_his_key, kline_cur_key, KLINE_COLUMNS, GRID_KLINE_STATUS, \
+from api import get_symbols, kline_his_key, kline_cur_key, KLINE_COLUMNS, GRID_KLINE_STATUS, \
     GRID_PRICE_STATUS, \
     get_cur_candle_begin_time
 

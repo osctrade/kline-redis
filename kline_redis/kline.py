@@ -12,10 +12,11 @@ import pandas as pd
 from redis import asyncio as aioredis
 from trade_lib.message import dinding_send
 
-from kline_redis import binance_kline
-from kline_redis.api import kline_his_key, GRID_KLINE_STATUS, kline_cur_key, GRID_PRICE_STATUS, EXCHANGE_INFO_KEY, \
+from binance_kline import Binance
+from api import kline_his_key, GRID_KLINE_STATUS, kline_cur_key, GRID_PRICE_STATUS, EXCHANGE_INFO_KEY, \
     get_symbols, get_kline, kline_check, get_current_price
-from kline_redis.repair import check_redis_klines, redis_run_check
+from repair import check_redis_klines, redis_run_check
+from util import split_list_by_n
 
 logger = logging.getLogger('kline_redis')
 
@@ -75,12 +76,12 @@ async def worker(queue, redis_server):
             queue.task_done()
 
 
-async def fetch_klines(binance: binance_kline.binance, event: asyncio.Event, redis_url, interval, cached_time,
+async def fetch_klines(ccxt_config, event: asyncio.Event, redis_url, interval, cached_time,
                        debug=False):
     """
     主程序，使用 ws 取得 kline 数据
     """
-
+    binance = Binance(ccxt_config)
     redis_server = await aioredis.from_url(redis_url, decode_responses=False)
     tasks = []
     try:
@@ -108,8 +109,14 @@ async def fetch_klines(binance: binance_kline.binance, event: asyncio.Event, red
         asyncio.create_task(
             check_redis_klines(redis_server, binance, interval, min(rows, 1000))
         )
-        # use my handle_ohlcv
-        await binance.watch_symbols_ohlcv(symbols, timeframe=interval)
+
+        if len(symbols) > 200:
+            for symbols in split_list_by_n(symbols, 100):
+                binance1 = Binance(ccxt_config)
+                await binance1.watch_symbols_ohlcv(symbols, timeframe=interval)
+        else:
+            # use my handle_ohlcv
+            await binance.watch_symbols_ohlcv(symbols, timeframe=interval)
         logger.info(f"redis kline started.")
         while True:
             if event.is_set():
@@ -132,7 +139,7 @@ async def fetch_klines(binance: binance_kline.binance, event: asyncio.Event, red
         logger.info(f"fetch klines stop.")
 
 
-async def check_symbol(binance: binance_kline.binance, event: asyncio.Event, redis_url):
+async def check_symbol(binance: Binance, event: asyncio.Event, redis_url):
     """
     检测交易所交易的永续合约 symbol 是否发生了变化，如发生变化，设置 event
     """
@@ -165,11 +172,11 @@ async def run(ccxt_config, redis_url, interval, cached_time, debug):
                         'options': {
                             'defaultType': 'future',  # spot, margin, future, delivery
                         }})
-    binance = binance_kline.binance(ccxt_config)
+    binance = Binance(ccxt_config)
     try:
         await asyncio.wait({
             asyncio.create_task(check_symbol(binance, event, redis_url)),
-            asyncio.create_task(fetch_klines(binance, event, redis_url, interval, cached_time, debug)),
+            asyncio.create_task(fetch_klines(ccxt_config, event, redis_url, interval, cached_time, debug)),
             asyncio.create_task(redis_run_check(redis_url))
         }, return_when=asyncio.FIRST_COMPLETED)
     except Exception:

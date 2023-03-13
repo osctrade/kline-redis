@@ -1,12 +1,12 @@
 import ccxt.pro
 
 
-class binance(ccxt.pro.binance):
+class Binance(ccxt.pro.binance):
     """
     支持多 symbol 取得 k 线，发送到队列 queue
     """
     def __init__(self, config={}):
-        super(binance, self).__init__(config)
+        super(Binance, self).__init__(config)
         if 'queue' in config:
             self.queue = config['queue']
         else:
@@ -58,4 +58,4 @@ class binance(ccxt.pro.binance):
         if event == 'kline':
             return self.handle_kline(client, message)
         else:
-            return super(binance, self).handle_message(client, message)
+            return super(Binance, self).handle_message(client, message)
