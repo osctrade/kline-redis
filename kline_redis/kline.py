@@ -12,11 +12,11 @@ import pandas as pd
 from redis import asyncio as aioredis
 from trade_lib.message import dinding_send
 
-from binance_kline import Binance
-from api import kline_his_key, GRID_KLINE_STATUS, kline_cur_key, GRID_PRICE_STATUS, EXCHANGE_INFO_KEY, \
+from .binance_kline import Binance
+from .api import kline_his_key, GRID_KLINE_STATUS, kline_cur_key, GRID_PRICE_STATUS, EXCHANGE_INFO_KEY, \
     get_symbols, get_kline, kline_check, get_current_price
-from repair import check_redis_klines, redis_run_check
-from util import split_list_by_n
+from .repair import check_redis_klines, redis_run_check
+from .util import split_list_by_n
 
 logger = logging.getLogger('kline_redis')
 
